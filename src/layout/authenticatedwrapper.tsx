@@ -3,11 +3,13 @@ import { useAuth } from "../context/auth";
 import { useLocation, useNavigate } from "react-router";
 import { set } from "react-hook-form";
 import Loading from "../components/loading";
+import { Flex } from "@chakra-ui/react";
 
 const AuthenticatedWrapper = ({ children }: {children: ReactNode }) => {
     //hooks
     const { authentication, loading } = useAuth();
     const [showLoading, setShowLoading] = useState(true);
+    const [darkMode, setDarkMode] = useState(true);
 
     //navigation
     const location = useLocation();
@@ -34,7 +36,7 @@ const AuthenticatedWrapper = ({ children }: {children: ReactNode }) => {
                 setShowLoading(false);
             }
         }
-    }, [setShowLoading, navigate, authentication, loading, pathname]);
+    }, [setShowLoading, navigate, authentication, loading, pathname, setDarkMode]);
 
     //preventing flickering, show loading screen while the user is being authenticated
     if (showLoading || loading){
@@ -42,8 +44,15 @@ const AuthenticatedWrapper = ({ children }: {children: ReactNode }) => {
     }
 
     return (
-        <>
+        <Flex
+            width="100%" 
+            height="100vh" 
+            bgColor={darkMode ? "black" : "white"} 
+            textColor={darkMode ? "white" : "black"}
+            flexDirection="column"
+            justifyItems="space-between"
+        >
         
-        </>
+        </Flex>
     )
 };
