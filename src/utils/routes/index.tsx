@@ -9,6 +9,11 @@ export const router = createBrowserRouter ([
         loader: () => "loading..."
     },
 
+    {
+        path: "/home",
+        loader: () => "loading..."
+    },
+
     //Universal Redirect
     {
         path: "*",
