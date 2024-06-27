@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLogin } from "../services/mutations";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { loginData } from "../types/loginData";
+import { loginData } from "../types";
 
 
 function Login(){

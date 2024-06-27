@@ -1,18 +1,15 @@
 import { RouterProvider } from 'react-router'
 import './App.css'
-import { Flex } from '@chakra-ui/react'
 import { router } from './utils/routes'
+import Loading from './components/loading'
 
 function App() {
 
   return (
-    <>
-    <RouterProvider router={router}
-    fallbackElement={
-      <Flex>Loading...</Flex>
+    <RouterProvider router={router} fallbackElement={
+      <Loading/>
     }
     />
-    </>
   )
 }
 
