@@ -1,26 +1,35 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Spacer, Text, useBreakpoint } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useLogin } from "../services/mutations";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { loginData } from "../types/loginData";
+
 
 function Login(){
     
+    //Hooks
     const [darkMode, setDarkMode] = useState(true);
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const currentBreakPoint = useBreakpoint();
+
+    //query stuff
+
+    const {handleSubmit, register} = useForm<loginData>();
+    const loginMutation = useLogin();
+
+    const handleLoginSubmit: SubmitHandler<loginData> = (data) => {
+        loginMutation.mutate(data);
+    }
+
 
     //for the password toggle
     function togglePasswordVisibility(){
         setPasswordVisible(!passwordVisible);
     }
 
-    let isPhone = false;
-    
-    if(currentBreakPoint === "base"){
-        isPhone = true;
-    }
-    
-    console.log(currentBreakPoint, typeof currentBreakPoint, "| Is Phone:" ,isPhone);
+    const isPhone = currentBreakPoint === "base";
 
     return (
         <>
@@ -44,18 +53,21 @@ function Login(){
                 {/* Main */}
                 <Box bgColor="white" textColor="black" px="10" py="10" mx={isPhone ? "8" : "auto"} borderRadius="10">
                     <Text fontSize="2xl" width="100%" align="center" mb="10"> Login</Text>
+                    <form onSubmit={handleSubmit(handleLoginSubmit)}>
                     <FormControl>
                         
                         <FormLabel>Username</FormLabel>
-                        <Input type="text" placeholder="Username"/>
+                        <Input type="text" placeholder="Username" {...register("username")} id="username"/>
                         
                         <Spacer my="3"/>
 
                         <FormLabel>Password</FormLabel>
                         <Flex>
-                            <Input type={passwordVisible ? "password" : "text"} placeholder="Password"/>
-                            <Button onClick={togglePasswordVisibility} p="0"> 
-                                {passwordVisible ? <FaEye/> : <FaEyeSlash/> }
+                            <Input type={passwordVisible ? "text" : "password"} placeholder="Password" {...register("password")} id="password"/>
+                            <Button 
+                            onClick={togglePasswordVisibility} p="0" 
+                            > 
+                                {passwordVisible ? <FaEyeSlash/> : <FaEye/> }
                             </Button>
 
                         </Flex>
@@ -63,9 +75,14 @@ function Login(){
 
                     <Flex width="100%" alignItems="center" mt="5">
                         <Spacer/>
-                        <Button bgColor="green" textColor="white" fontWeight="bold">Login</Button>
+                        <Button bgColor="green" textColor="white" fontWeight="bold" 
+                        disabled={loginMutation.isPending}
+                        value={loginMutation.isPending ? "Logging in..." : "Login"}
+                        type="submit" onSubmit={handleSubmit(handleLoginSubmit)}
+                        >Login</Button>
                         <Spacer/>
                     </Flex>
+                    </form>
                 </Box>
 
                 <Spacer/>
